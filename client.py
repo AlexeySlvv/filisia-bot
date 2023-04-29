@@ -5,20 +5,20 @@ from create_bot import dp
 from openaihosted import Completion
 
 async def do_start(msg: types.Message):
-    await msg.answer("Бот GPT. Напишите свой запрос.")
+    await msg.answer("Спросите меня о чём-нибудь.")
 
 
 async def do_help(msg: types.Message):
-    await msg.answer("Бот выполняет запрос к GPT на сайте openai.a2hosted.com.")
+    await msg.answer("Напишите свой вопрос. Филисия ответит сразу как только освободится.")
 
 
 # @dp.message_handler()
 async def do_reply(msg: types.Message):
     if msg.text.startswith('/'):
-        await msg.reply(text="Запрос не должен начинаться с /")
+        await msg.reply(text="Вопрос не должен начинаться с /")
 
     try:
-        await msg.reply(text="Уже пишу")
+        await msg.reply(text="Уже пишу. \N{feather}")
 
         resp = Completion.create(systemprompt="", text=msg.text, assistantprompt="")
         await msg.reply(text=resp["response"].replace("\\n", "\n"))
