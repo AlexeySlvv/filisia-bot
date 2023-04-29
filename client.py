@@ -9,7 +9,7 @@ async def do_start(msg: types.Message):
 
 
 async def do_help(msg: types.Message):
-    await msg.answer("Напишите свой вопрос. Филисия ответит сразу как только освободится.")
+    await msg.answer("Напишите свой вопрос. Я отвечу сразу как только освобожусь.")
 
 
 # @dp.message_handler()
