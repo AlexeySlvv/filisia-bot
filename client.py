@@ -21,7 +21,7 @@ async def do_reply(msg: types.Message):
         await msg.reply(text="Уже пишу. \N{feather}")
 
         resp = Completion.create(systemprompt="", text=msg.text, assistantprompt="")
-        await msg.reply(text=resp["response"].replace("\\n", "\n"))
+        await msg.reply(text=resp["response"].replace("\\n", "\n").replace('\\', '"'))
     except Exception as e:
         await msg.reply(text="Ошибка: "+str(e))
 
