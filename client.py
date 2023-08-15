@@ -1,8 +1,9 @@
 from aiogram import types
+import g4f
 
 from create_bot import dp
 
-from openaihosted import Completion
+#from openaihosted import Completion
 
 async def do_start(msg: types.Message):
     await msg.answer("Спросите меня о чём-нибудь.")
@@ -19,9 +20,10 @@ async def do_reply(msg: types.Message):
 
     try:
         await msg.reply(text="Уже пишу. \N{feather}")
-
-        resp = Completion.create(systemprompt="", text=msg.text, assistantprompt="")
-        await msg.reply(text=resp["response"].replace("\\n", "\n").replace('\\', '"'))
+        resp = g4f.ChatCompletion.create(model='gpt-3.5-turbo', provider=g4f.Provider.Ails, messages=[{"role": "user", "content": msg.text}], stream=True)
+        #resp = Completion.create(systemprompt="", text=msg.text, assistantprompt="")
+        #await msg.reply(text=resp["response"].replace("\\n", "\n").replace('\\', '"'))
+        await msg.reply(''.join(resp))
     except Exception as e:
         await msg.reply(text="Ошибка: "+str(e))
 

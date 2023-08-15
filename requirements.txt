@@ -1,3 +1,2 @@
 aiogram
-requests
-fake_useragent
+g4f
