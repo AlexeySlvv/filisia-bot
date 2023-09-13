@@ -19,11 +19,12 @@ async def do_reply(msg: types.Message):
         await msg.reply(text="Вопрос не должен начинаться с /")
 
     try:
-        await msg.reply(text="Уже пишу. \N{feather}")
-        resp = g4f.ChatCompletion.create(model='gpt-3.5-turbo', provider=g4f.Provider.Ails, messages=[{"role": "user", "content": msg.text}], stream=True)
+        msg1 = await msg.reply(text="Уже пишу. \N{feather}")
+        resp = g4f.ChatCompletion.create(model='gpt-3.5-turbo', provider=g4f.Provider.DeepAi, messages=[{"role": "user", "content": msg.text}], stream=True)
         #resp = Completion.create(systemprompt="", text=msg.text, assistantprompt="")
         #await msg.reply(text=resp["response"].replace("\\n", "\n").replace('\\', '"'))
         await msg.reply(''.join(resp))
+        await msg1.delete()
     except Exception as e:
         await msg.reply(text="Ошибка: "+str(e))
 
