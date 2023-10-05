@@ -20,7 +20,7 @@ async def do_reply(msg: types.Message):
 
     try:
         msg1 = await msg.reply(text="Уже пишу. \N{feather}")
-        resp = await g4f.ChatCompletion.create_async(model='gpt-3.5-turbo', provider=g4f.Provider.DeepAi, messages=[{"role": "user", "content": msg.text}])
+        resp = await g4f.ChatCompletion.create_async(model='gpt-3.5-turbo', provider=g4f.Provider.FreeGpt, messages=[{"role": "user", "content": msg.text}])
         await msg.reply(resp)
         await msg1.delete()
     except Exception as e:
