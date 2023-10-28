@@ -10,7 +10,6 @@ from gigachat import get_token, get_models, get_reply
 
 
 t_key = Literal["access_token", "expires_at"]
-m_key = Literal["id", "object", "owned_by"]
 
 
 async def do_start(msg: types.Message):
@@ -41,25 +40,26 @@ async def do_reply(msg: types.Message):
             ts = time.time() * 1000
             time_expired = bool(expat) and int(ts) > int(expat)
 
-            if not token_exist or time_expired or not token:
+            if not token_exist or time_expired or not token or not expat:
                 t: dict[t_key, str] = get_token()
                 token, expat = t.get("access_token"), t.get("expires_at")
 
-                if token is None and expat is None:
-                    raise Exception("No access_token and expires_at")
+                if not token or not expat:
+                    raise Exception("No access_token or expires_at")
 
                 with open(token_path, mode="w+") as t_out:
                     json.dump(t, t_out, ensure_ascii=False, indent=4)
 
-            models: list[dict[m_key, str]] = get_models(token=token).get("data")
-            if models:
-                # just using the very first model
-                model = models[0]["id"]
-                answ = get_reply(token=token, model=model, prompt=msg.text)
-                resp = answ["choices"][0]["message"]["content"] 
+            # models: list[dict[m_key, str]] = get_models(token=token).get("data")
+            # if models:
+            #     # just use the very first model
+            #     model = models[0]["id"]
+
+            model = "GigaChat:latest" # always use the latest model
+            answ = get_reply(token=token, model=model, prompt=msg.text)
+            resp = answ["choices"][0]["message"]["content"]
 
             await msg.reply(resp)
-            await msg1.delete()
         except Exception as e:
             await msg.reply("Извините, случилась внезапная оказия.")
             await msg.answer(text=str(e))
